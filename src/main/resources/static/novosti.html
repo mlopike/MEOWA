@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Новости — ФинТабло</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="board">
+  <div class="board-inner">
+    <a href="index.html" class="brand">ФинТабло<span class="brand-dot">.</span></a>
+    <button class="tabs-toggle" aria-label="Меню" aria-expanded="false">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+    <nav class="tabs">
+      <a href="index.html" class="tab"><span class="tab-index">01</span>Банки</a>
+      <a href="novosti.html" class="tab is-active"><span class="tab-index">02</span>Новости</a>
+      <a href="pogoda.html" class="tab"><span class="tab-index">03</span>Погода</a>
+      <a href="kurs.html" class="tab"><span class="tab-index">04</span>Курс</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page">
+  <div class="page-head">
+    <div>
+      <div class="h-eyebrow">02 / Раздел</div>
+      <h1 class="page-title">Новости</h1>
+      <p class="page-sub">Короткие заметки о курсах, банках и экономике — фильтруйте по теме.</p>
+    </div>
+  </div>
+
+  <div class="toolbar" style="margin-bottom:18px;">
+    <button class="chip is-active" data-news-chip="all">Все</button>
+    <button class="chip" data-news-chip="kurs">Курс валют</button>
+    <button class="chip" data-news-chip="banki">Банки</button>
+    <button class="chip" data-news-chip="economy">Экономика</button>
+  </div>
+
+  <div class="news-list">
+
+    <a href="#" class="news-item" data-news-item data-category="kurs">
+      <div class="news-date">21 июня</div>
+      <div>
+        <span class="news-tag">Курс валют</span>
+        <h3 class="news-title">Доллар укрепился второй день подряд</h3>
+        <p class="news-snippet">Банки скорректировали курс продажи в пределах 0,3–0,5% — аналитики связывают это с сезонным спросом на наличную валюту.</p>
+      </div>
+    </a>
+
+    <a href="#" class="news-item" data-news-item data-category="banki">
+      <div class="news-date">20 июня</div>
+      <div>
+        <span class="news-tag">Банки</span>
+        <h3 class="news-title">Столичный Банк снизил комиссию за переводы</h3>
+        <p class="news-snippet">Для переводов внутри страны комиссия снижена до 0,5%, изменения уже действуют в мобильном приложении и отделениях.</p>
+      </div>
+    </a>
+
+    <a href="#" class="news-item" data-news-item data-category="economy">
+      <div class="news-date">19 июня</div>
+      <div>
+        <span class="news-tag">Экономика</span>
+        <h3 class="news-title">Инфляция за месяц замедлилась до 0,4%</h3>
+        <p class="news-snippet">Регулятор отмечает стабилизацию цен на продовольствие как основной фактор замедления роста цен в июне.</p>
+      </div>
+    </a>
+
+    <a href="#" class="news-item" data-news-item data-category="kurs">
+      <div class="news-date">18 июня</div>
+      <div>
+        <span class="news-tag">Курс валют</span>
+        <h3 class="news-title">Разница между курсами банков выросла</h3>
+        <p class="news-snippet">Спред между самым выгодным и самым дорогим предложением по евро достиг 0,9 рубля — сравнение курсов доступно в разделе «Курс».</p>
+      </div>
+    </a>
+
+    <a href="#" class="news-item" data-news-item data-category="banki">
+      <div class="news-date">17 июня</div>
+      <div>
+        <span class="news-tag">Банки</span>
+        <h3 class="news-title">Гарант Кредит запустил вечерний обмен валют</h3>
+        <p class="news-snippet">Три отделения в центре города теперь работают до 21:00 — обмен наличной валюты доступен без предварительной записи.</p>
+      </div>
+    </a>
+
+    <a href="#" class="news-item" data-news-item data-category="economy">
+      <div class="news-date">16 июня</div>
+      <div>
+        <span class="news-tag">Экономика</span>
+        <h3 class="news-title">Розничные продажи выросли на 2,1%</h3>
+        <p class="news-snippet">Рост обеспечен в основном продажами электроники и бытовой техники в преддверии летнего сезона скидок.</p>
+      </div>
+    </a>
+
+  </div>
+</main>
+
+<footer class="board-footer">ФинТабло — учебный макет интерфейса, данные демонстрационные.</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
