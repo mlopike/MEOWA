@@ -33,79 +33,149 @@
     <div class="field" style="min-width:200px;">
       <label for="city-select">Город</label>
       <select id="city-select">
-        <option>Минск</option>
-        <option>Гомель</option>
-        <option>Брест</option>
+        <option value="1">Минск</option>
+        <option value="2">Гомель</option>
+        <option value="3">Брест</option>
       </select>
     </div>
   </div>
 
   <section class="card">
     <div class="weather-hero">
-      <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" color="#E2A640">
-        <circle cx="12" cy="12" r="5"/>
-        <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
-        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-        <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
-        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-      </svg>
+      <div id="weather-icon">
+        <!-- иконка подставляется динамически -->
+      </div>
 
       <div>
-        <div class="weather-city">Минск</div>
-        <div class="weather-temp">24<sup>°C</sup></div>
-        <div class="weather-cond">Переменная облачность, без осадков</div>
+        <div class="weather-city" id="weather-city">—</div>
+        <div class="weather-temp" id="weather-temp">—<sup>°C</sup></div>
+        <div class="weather-cond" id="weather-cond">Загрузка...</div>
       </div>
 
       <div class="weather-extra">
-        <span>Ощущается как <b>22°C</b></span>
-        <span>Ветер <b>3 м/с, СЗ</b></span>
-        <span>Влажность <b>54%</b></span>
-        <span>Давление <b>748 мм рт. ст.</b></span>
+        <span>Ощущается как <b id="feels-like">—</b></span>
+        <span>Ветер <b id="wind">—</b></span>
+        <span>Влажность <b id="humidity">—</b></span>
+        <span>Давление <b id="pressure">—</b></span>
+        <span>Осадки <b id="precipitation">—</b></span>
       </div>
     </div>
 
-    <div class="forecast-strip">
-      <div class="forecast-cell">
-        <div class="forecast-time">Сейчас</div>
-        <svg class="forecast-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E2A640" stroke-width="2"><circle cx="12" cy="12" r="5"/></svg>
-        <div class="forecast-temp">24°</div>
-      </div>
-      <div class="forecast-cell">
-        <div class="forecast-time">15:00</div>
-        <svg class="forecast-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9B9382" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>
-        <div class="forecast-temp">25°</div>
-      </div>
-      <div class="forecast-cell">
-        <div class="forecast-time">18:00</div>
-        <svg class="forecast-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9B9382" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>
-        <div class="forecast-temp">22°</div>
-      </div>
-      <div class="forecast-cell">
-        <div class="forecast-time">21:00</div>
-        <svg class="forecast-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6B6657" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-        <div class="forecast-temp">18°</div>
-      </div>
-      <div class="forecast-cell">
-        <div class="forecast-time">00:00</div>
-        <svg class="forecast-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6B6657" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-        <div class="forecast-temp">15°</div>
-      </div>
-      <div class="forecast-cell">
-        <div class="forecast-time">03:00</div>
-        <svg class="forecast-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6B6657" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-        <div class="forecast-temp">14°</div>
-      </div>
+    <div class="forecast-strip" id="forecast-strip">
+      <!-- подставляется динамически -->
     </div>
   </section>
-
-  <div class="demo-note">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-    Демонстрационные данные — для подключения реального прогноза потребуется источник погодных данных.
-  </div>
 </main>
 
 <footer class="board-footer">ФинТабло — учебный макет интерфейса, данные демонстрационные.</footer>
 
 <script src="script.js"></script>
+<script>
+  // Иконки по weather_code (WMO)
+  function getWeatherIcon(code, color) {
+    if (code === 0) return `
+      <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="1.5">
+        <circle cx="12" cy="12" r="5"/>
+        <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+        <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+      </svg>`;
+    if (code <= 3) return `
+      <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="1.5">
+        <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+      </svg>`;
+    if (code <= 67) return `
+      <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="1.5">
+        <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+        <line x1="8" y1="19" x2="8" y2="21"/><line x1="12" y1="19" x2="12" y2="21"/>
+        <line x1="16" y1="19" x2="16" y2="21"/>
+      </svg>`;
+    if (code <= 77) return `
+      <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="1.5">
+        <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+        <line x1="8" y1="19" x2="9" y2="21"/><line x1="12" y1="19" x2="13" y2="21"/>
+        <line x1="16" y1="19" x2="17" y2="21"/>
+      </svg>`;
+    return `
+      <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="1.5">
+        <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+      </svg>`;
+  }
+
+  // Маленькие иконки для прогноза
+  function getSmallIcon(code) {
+    if (code === 0) return `<svg class="forecast-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E2A640" stroke-width="2"><circle cx="12" cy="12" r="5"/></svg>`;
+    if (code <= 3) return `<svg class="forecast-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9B9382" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>`;
+    return `<svg class="forecast-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9B9382" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/><line x1="8" y1="19" x2="8" y2="21"/><line x1="12" y1="19" x2="12" y2="21"/><line x1="16" y1="19" x2="16" y2="21"/></svg>`;
+  }
+
+  // Текстовое описание по weather_code
+  function getWeatherDesc(code) {
+    if (code === 0) return 'Ясно';
+    if (code === 1) return 'Преимущественно ясно';
+    if (code === 2) return 'Переменная облачность';
+    if (code === 3) return 'Пасмурно';
+    if (code <= 48) return 'Туман';
+    if (code <= 57) return 'Морось';
+    if (code <= 67) return 'Дождь';
+    if (code <= 77) return 'Снег';
+    if (code <= 82) return 'Ливень';
+    return 'Гроза';
+  }
+
+  const cityNames = { 1: 'Минск', 2: 'Гомель', 3: 'Брест' };
+
+  async function loadWeather(locationId) {
+    try {
+      const res = await fetch(`/api/weather/${locationId}`);
+      const data = await res.json();
+      if (!data.length) return;
+
+      const now = new Date();
+      const current = data.reduce((prev, curr) => {
+        const prevDiff = Math.abs(new Date(prev.measureT) - now);
+        const currDiff = Math.abs(new Date(curr.measureT) - now);
+        return currDiff < prevDiff ? curr : prev;
+      });
+
+      // Главный блок
+      document.getElementById('weather-city').textContent = cityNames[locationId] || '—';
+      document.getElementById('weather-temp').innerHTML = `${Math.round(current.temperature)}<sup>°C</sup>`;
+      document.getElementById('weather-cond').textContent = getWeatherDesc(current.weatherCode);
+      document.getElementById('weather-icon').innerHTML = getWeatherIcon(current.weatherCode, '#E2A640');
+      document.getElementById('feels-like').textContent = `${Math.round(current.apparentTemperature)}°C`;
+      document.getElementById('wind').textContent = `${current.windSpeed} м/с, ${current.windDirection}`;
+      document.getElementById('humidity').textContent = `${current.relativeHumidity}%`;
+      document.getElementById('pressure').textContent = `${Math.round(current.surfacePressure * 0.750064)} мм рт. ст.`;
+      document.getElementById('precipitation').textContent = `${current.precipitation} мм`;
+
+      // Прогноз — следующие 6 часов
+      const currentIndex = data.indexOf(current);
+      const forecast = data.slice(currentIndex, currentIndex + 6);
+      const strip = document.getElementById('forecast-strip');
+      strip.innerHTML = forecast.map((item, i) => {
+        const hours = new Date(item.measureT).getHours().toString().padStart(2, '0');
+        return `
+          <div class="forecast-cell">
+            <div class="forecast-time">${i === 0 ? 'Сейчас' : hours + ':00'}</div>
+            ${getSmallIcon(item.weatherCode)}
+            <div class="forecast-temp">${Math.round(item.temperature)}°</div>
+          </div>`;
+      }).join('');
+
+    } catch (e) {
+      console.error('Ошибка загрузки погоды:', e);
+    }
+  }
+
+  // Загрузка при старте
+  loadWeather(document.getElementById('city-select').value);
+
+  // Смена города
+  document.getElementById('city-select').addEventListener('change', function() {
+    loadWeather(this.value);
+  });
+</script>
 </body>
 </html>
