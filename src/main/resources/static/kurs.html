@@ -28,12 +28,13 @@
     <div>
       <div class="h-eyebrow">04 / Раздел</div>
       <h1 class="page-title">Курс валют</h1>
-      <p class="page-sub">Конвертируйте валюту по курсу Беларусбанка. Данные обновляются автоматически.</p>
+      <p class="page-sub">Конвертируйте валюту по среднему курсу Беларусбанка. Данные обновляются автоматически.</p>
     </div>
   </div>
 
   <div class="kurs-grid">
 
+    <!-- ЛЕВАЯ КОЛОНКА: Конвертер -->
     <section class="card card-pad">
       <div class="panel-head">
         <span class="panel-title">Конвертер</span>
@@ -74,65 +75,110 @@
       </div>
 
       <div class="current-rate">
-        <span class="flap flap-lg" data-rate-out>Загрузка...</span>
-        <span class="delta" id="update-time">Обновлено: --</span>
+        <span class="flap flap-lg" data-rate-out>— —</span>
+        <span class="delta" id="update-time">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span id="update-text">загрузка...</span>
+        </span>
       </div>
 
-      <div style="margin-top: 20px; padding: 15px; background: #f5f5f5; border-radius: 4px;">
-        <strong>Средние курсы по Беларусбанку:</strong>
-        <div style="margin-top: 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-          <div>
-            <strong>USD:</strong> 
-            <span style="color: #28a745;" id="usd-buy">—</span> / 
-            <span style="color: #dc3545;" id="usd-sell">—</span>
+      <!-- Средние курсы в стиле "табло" -->
+      <div style="margin-top: 24px; padding: 18px; background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius-m);">
+        <div style="font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 12px;">
+          Средний курс по Беларуси
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;">
+          
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div style="font-family: var(--f-display); font-weight: 600; font-size: 13px;">USD</div>
+            <div style="display: flex; gap: 6px;">
+              <span class="flap flap-sm" id="usd-buy">—</span>
+              <span class="flap flap-sm" id="usd-sell">—</span>
+            </div>
+            <div style="font-family: var(--f-mono); font-size: 10px; color: var(--text-faint); display: flex; justify-content: space-between;">
+              <span style="color: var(--green);">покупка</span>
+              <span style="color: var(--coral);">продажа</span>
+            </div>
           </div>
-          <div>
-            <strong>EUR:</strong> 
-            <span style="color: #28a745;" id="eur-buy">—</span> / 
-            <span style="color: #dc3545;" id="eur-sell">—</span>
+
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div style="font-family: var(--f-display); font-weight: 600; font-size: 13px;">EUR</div>
+            <div style="display: flex; gap: 6px;">
+              <span class="flap flap-sm" id="eur-buy">—</span>
+              <span class="flap flap-sm" id="eur-sell">—</span>
+            </div>
+            <div style="font-family: var(--f-mono); font-size: 10px; color: var(--text-faint); display: flex; justify-content: space-between;">
+              <span style="color: var(--green);">покупка</span>
+              <span style="color: var(--coral);">продажа</span>
+            </div>
           </div>
-          <div>
-            <strong>RUB:</strong> 
-            <span style="color: #28a745;" id="rub-buy">—</span> / 
-            <span style="color: #dc3545;" id="rub-sell">—</span>
+
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div style="font-family: var(--f-display); font-weight: 600; font-size: 13px;">RUB</div>
+            <div style="display: flex; gap: 6px;">
+              <span class="flap flap-sm" id="rub-buy">—</span>
+              <span class="flap flap-sm" id="rub-sell">—</span>
+            </div>
+            <div style="font-family: var(--f-mono); font-size: 10px; color: var(--text-faint); display: flex; justify-content: space-between;">
+              <span style="color: var(--green);">покупка</span>
+              <span style="color: var(--coral);">продажа</span>
+            </div>
           </div>
-          <div style="font-size: 12px; color: #666;">
-            Всего отделений: <span id="total-branches">0</span>
-          </div>
+
+        </div>
+        <div style="margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line); font-family: var(--f-mono); font-size: 11px; color: var(--text-faint); display: flex; justify-content: space-between;">
+          <span>Отделений в базе: <b style="color: var(--text); font-weight: 600;" id="total-branches">0</b></span>
+          <span>Источник: <b style="color: var(--amber-dim); font-weight: 600;">Беларусбанк</b></span>
         </div>
       </div>
     </section>
 
+    <!-- ПРАВАЯ КОЛОНКА: Информация -->
     <aside class="card card-pad">
       <div class="panel-head">
-        <span class="panel-title">Информация</span>
+        <span class="panel-title">Управление</span>
       </div>
-      
-      <div style="padding: 20px 0;">
-        <p style="margin-bottom: 15px;">
-          <strong>Источник данных:</strong><br>
-          Беларусбанк (API)
-        </p>
-        
-        <p style="margin-bottom: 15px;">
-          <strong>Как работает:</strong><br>
-          <small>Конвертер использует средние курсы по всем отделениям Беларусбанка в Беларуси.</small>
-        </p>
 
-        <div style="margin-top: 20px;">
-          <a href="/kurs/fetch" class="btn" style="display: block; text-align: center; padding: 12px; background: #0055a5; color: white; text-decoration: none; border-radius: 4px; margin-bottom: 10px;" onclick="refreshRates()">
-            🔄 Обновить курсы
-          </a>
-          <a href="/kurs/api" class="btn" style="display: block; text-align: center; padding: 12px; background: #6c757d; color: white; text-decoration: none; border-radius: 4px;">
-            📥 Скачать данные (JSON)
-          </a>
-        </div>
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <button class="btn btn-primary" onclick="refreshRates()" style="width: 100%; justify-content: center;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+          Обновить курсы
+        </button>
+        <a href="/kurs/api" class="btn" style="width: 100%; justify-content: center; text-decoration: none;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Скачать JSON
+        </a>
+      </div>
 
-        <div style="margin-top: 20px; padding: 15px; background: #e7f3ff; border-left: 4px solid #0055a5; border-radius: 4px;">
-          <small>
-            <strong>Примечание:</strong> Курсы могут отличаться в разных отделениях. Для точной информации обратитесь в конкретное отделение.
-          </small>
+      <div style="margin-top: 20px; padding: 16px; background: var(--paper); border-left: 3px solid var(--amber); border-radius: var(--radius-s);">
+        <div style="font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--amber-dim); margin-bottom: 8px;">
+          Источник
         </div>
+        <div style="font-weight: 600; font-size: 14px; margin-bottom: 4px;">Беларусбанк API</div>
+        <div style="font-size: 12.5px; color: var(--text-soft); line-height: 1.5;">
+          Курсы обновляются по всем отделениям банка в Беларуси. Отображаются средние значения.
+        </div>
+      </div>
+
+      <div style="margin-top: 20px; padding: 16px; border: 1px solid var(--line); border-radius: var(--radius-s);">
+        <div style="font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 8px;">
+          Как читать курсы
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px; font-size: 13px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="color: var(--green); font-weight: 600;">●</span>
+            <span><b>Покупка</b> — банк покупает у вас валюту</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="color: var(--coral); font-weight: 600;">●</span>
+            <span><b>Продажа</b> — банк продаёт вам валюту</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-note" style="margin-top: 20px;">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        Курсы могут отличаться в разных отделениях.
       </div>
     </aside>
 
@@ -167,50 +213,48 @@ async function loadRates() {
       calculateAverageRates(data);
       updateUI();
     } else {
-      document.querySelector('[data-rate-out]').textContent = 'Нет данных';
+      document.querySelector('[data-rate-out]').textContent = '— —';
+      document.getElementById('update-text').textContent = 'нет данных';
     }
   } catch (error) {
     console.error('Ошибка загрузки курсов:', error);
-    document.querySelector('[data-rate-out]').textContent = 'Ошибка загрузки';
+    document.querySelector('[data-rate-out]').textContent = '— —';
+    document.getElementById('update-text').textContent = 'ошибка';
   }
 }
 
 // Вычисление средних курсов
 function calculateAverageRates(data) {
-  let usdBuySum = 0, usdSellSum = 0;
-  let eurBuySum = 0, eurSellSum = 0;
-  let rubBuySum = 0, rubSellSum = 0;
-  let count = 0;
+  let usdBuySum = 0, usdSellSum = 0, usdCount = 0;
+  let eurBuySum = 0, eurSellSum = 0, eurCount = 0;
+  let rubBuySum = 0, rubSellSum = 0, rubCount = 0;
   let lastTime = null;
 
   data.forEach(item => {
-    if (item.usdIn) { usdBuySum += item.usdIn; count++; }
-    if (item.usdOut) usdSellSum += item.usdOut;
-    if (item.eurIn) eurBuySum += item.eurIn;
-    if (item.eurOut) eurSellSum += item.eurOut;
-    if (item.rubIn) rubBuySum += item.rubIn;
-    if (item.rubOut) rubSellSum += item.rubOut;
+    if (item.usdIn) { usdBuySum += item.usdIn; usdCount++; }
+    if (item.usdOut) { usdSellSum += item.usdOut; usdCount++; }
+    if (item.eurIn) { eurBuySum += item.eurIn; eurCount++; }
+    if (item.eurOut) { eurSellSum += item.eurOut; eurCount++; }
+    if (item.rubIn) { rubBuySum += item.rubIn; rubCount++; }
+    if (item.rubOut) { rubSellSum += item.rubOut; rubCount++; }
     if (item.time && (!lastTime || item.time > lastTime)) lastTime = item.time;
   });
 
-  rates.USD.buy = count > 0 ? (usdBuySum / count).toFixed(4) : 0;
-  rates.USD.sell = count > 0 ? (usdSellSum / count).toFixed(4) : 0;
-  rates.EUR.buy = count > 0 ? (eurBuySum / count).toFixed(4) : 0;
-  rates.EUR.sell = count > 0 ? (eurSellSum / count).toFixed(4) : 0;
-  rates.RUB.buy = count > 0 ? (rubBuySum / count).toFixed(4) : 0;
-  rates.RUB.sell = count > 0 ? (rubSellSum / count).toFixed(4) : 0;
+  rates.USD.buy = usdCount > 0 ? (usdBuySum / (usdCount/2)).toFixed(4) : 0;
+  rates.USD.sell = usdCount > 0 ? (usdSellSum / (usdCount/2)).toFixed(4) : 0;
+  rates.EUR.buy = eurCount > 0 ? (eurBuySum / (eurCount/2)).toFixed(4) : 0;
+  rates.EUR.sell = eurCount > 0 ? (eurSellSum / (eurCount/2)).toFixed(4) : 0;
+  rates.RUB.buy = rubCount > 0 ? (rubBuySum / (rubCount/2)).toFixed(4) : 0;
+  rates.RUB.sell = rubCount > 0 ? (rubSellSum / (rubCount/2)).toFixed(4) : 0;
 
   // Обновление времени
   if (lastTime) {
     const date = new Date(lastTime);
     const timeStr = date.toLocaleString('ru-RU', { 
-      day: '2-digit', 
-      month: '2-digit', 
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
+      day: '2-digit', month: '2-digit', year: 'numeric',
+      hour: '2-digit', minute: '2-digit'
     });
-    document.getElementById('update-time').textContent = 'Обновлено: ' + timeStr;
+    document.getElementById('update-text').textContent = timeStr;
   }
 
   document.getElementById('total-branches').textContent = data.length;
@@ -277,7 +321,12 @@ function convert() {
   }
 
   amountTo.value = result.toFixed(2);
-  rateOut.textContent = `1 ${from} = ${(rates[from].buy / rates[to].sell).toFixed(4)} ${to}`;
+  
+  if (rates[from].buy > 0 && rates[to].sell > 0) {
+    rateOut.textContent = `${(rates[from].buy / rates[to].sell).toFixed(4)}`;
+  } else {
+    rateOut.textContent = '— —';
+  }
 }
 
 // Обновление курсов по кнопке
@@ -291,7 +340,6 @@ function refreshRates() {
     .catch(error => {
       alert('Ошибка обновления: ' + error);
     });
-  return false;
 }
 </script>
 </body>
