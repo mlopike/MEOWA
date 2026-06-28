@@ -12,7 +12,7 @@ public class BranchRate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @JsonProperty("filial_id")
     @Column(name = "fil_id")

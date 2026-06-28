@@ -26,7 +26,7 @@
 <main class="page">
   <div class="page-head">
     <div>
-      <div class="h-eyebrow">04 / Раздел</div>
+      <div class="h-eyebrow">04 / Раздел</div>от
       <h1 class="page-title">Курс валют</h1>
       <p class="page-sub">Конвертируйте валюту по среднему курсу Беларусбанка. Данные обновляются автоматически.</p>
     </div>
@@ -206,8 +206,14 @@ document.addEventListener('DOMContentLoaded', function() {
 // Загрузка курсов с API
 async function loadRates() {
   try {
+    console.log('Загрузка курсов...');
     const response = await fetch('/kurs/api');
     const data = await response.json();
+    
+    console.log('Получено записей:', data.length);
+    if (data.length > 0) {
+      console.log('Первая запись:', data[0]);
+    }
     
     if (data && data.length > 0) {
       calculateAverageRates(data);
@@ -225,27 +231,62 @@ async function loadRates() {
 
 // Вычисление средних курсов
 function calculateAverageRates(data) {
-  let usdBuySum = 0, usdSellSum = 0, usdCount = 0;
-  let eurBuySum = 0, eurSellSum = 0, eurCount = 0;
-  let rubBuySum = 0, rubSellSum = 0, rubCount = 0;
+  let usdBuySum = 0, usdBuyCount = 0;
+  let usdSellSum = 0, usdSellCount = 0;
+  let eurBuySum = 0, eurBuyCount = 0;
+  let eurSellSum = 0, eurSellCount = 0;
+  let rubBuySum = 0, rubBuyCount = 0;
+  let rubSellSum = 0, rubSellCount = 0;
   let lastTime = null;
 
   data.forEach(item => {
-    if (item.usdIn) { usdBuySum += item.usdIn; usdCount++; }
-    if (item.usdOut) { usdSellSum += item.usdOut; usdCount++; }
-    if (item.eurIn) { eurBuySum += item.eurIn; eurCount++; }
-    if (item.eurOut) { eurSellSum += item.eurOut; eurCount++; }
-    if (item.rubIn) { rubBuySum += item.rubIn; rubCount++; }
-    if (item.rubOut) { rubSellSum += item.rubOut; rubCount++; }
+    // ВАЖНО: поля называются USD_in, USD_out (с большой буквы!)
+    // USD
+    if (item.USD_in != null && item.USD_in !== '') {
+      const val = parseFloat(item.USD_in);
+      if (!isNaN(val)) { usdBuySum += val; usdBuyCount++; }
+    }
+    if (item.USD_out != null && item.USD_out !== '') {
+      const val = parseFloat(item.USD_out);
+      if (!isNaN(val)) { usdSellSum += val; usdSellCount++; }
+    }
+    
+    // EUR
+    if (item.EUR_in != null && item.EUR_in !== '') {
+      const val = parseFloat(item.EUR_in);
+      if (!isNaN(val)) { eurBuySum += val; eurBuyCount++; }
+    }
+    if (item.EUR_out != null && item.EUR_out !== '') {
+      const val = parseFloat(item.EUR_out);
+      if (!isNaN(val)) { eurSellSum += val; eurSellCount++; }
+    }
+    
+    // RUB
+    if (item.RUB_in != null && item.RUB_in !== '') {
+      const val = parseFloat(item.RUB_in);
+      if (!isNaN(val)) { rubBuySum += val; rubBuyCount++; }
+    }
+    if (item.RUB_out != null && item.RUB_out !== '') {
+      const val = parseFloat(item.RUB_out);
+      if (!isNaN(val)) { rubSellSum += val; rubSellCount++; }
+    }
+    
+    // Время
     if (item.time && (!lastTime || item.time > lastTime)) lastTime = item.time;
   });
 
-  rates.USD.buy = usdCount > 0 ? (usdBuySum / (usdCount/2)).toFixed(4) : 0;
-  rates.USD.sell = usdCount > 0 ? (usdSellSum / (usdCount/2)).toFixed(4) : 0;
-  rates.EUR.buy = eurCount > 0 ? (eurBuySum / (eurCount/2)).toFixed(4) : 0;
-  rates.EUR.sell = eurCount > 0 ? (eurSellSum / (eurCount/2)).toFixed(4) : 0;
-  rates.RUB.buy = rubCount > 0 ? (rubBuySum / (rubCount/2)).toFixed(4) : 0;
-  rates.RUB.sell = rubCount > 0 ? (rubSellSum / (rubCount/2)).toFixed(4) : 0;
+  // Логируем для отладки
+  console.log('USD: buyCount=' + usdBuyCount + ', sellCount=' + usdSellCount);
+  console.log('EUR: buyCount=' + eurBuyCount + ', sellCount=' + eurSellCount);
+  console.log('RUB: buyCount=' + rubBuyCount + ', sellCount=' + rubSellCount);
+
+  // Средние значения
+  rates.USD.buy = usdBuyCount > 0 ? (usdBuySum / usdBuyCount).toFixed(4) : 0;
+  rates.USD.sell = usdSellCount > 0 ? (usdSellSum / usdSellCount).toFixed(4) : 0;
+  rates.EUR.buy = eurBuyCount > 0 ? (eurBuySum / eurBuyCount).toFixed(4) : 0;
+  rates.EUR.sell = eurSellCount > 0 ? (eurSellSum / eurSellCount).toFixed(4) : 0;
+  rates.RUB.buy = rubBuyCount > 0 ? (rubBuySum / rubBuyCount).toFixed(4) : 0;
+  rates.RUB.sell = rubSellCount > 0 ? (rubSellSum / rubSellCount).toFixed(4) : 0;
 
   // Обновление времени
   if (lastTime) {
@@ -262,6 +303,8 @@ function calculateAverageRates(data) {
 
 // Обновление интерфейса
 function updateUI() {
+  console.log('Обновление UI. Курсы:', rates);
+  
   document.getElementById('usd-buy').textContent = rates.USD.buy;
   document.getElementById('usd-sell').textContent = rates.USD.sell;
   document.getElementById('eur-buy').textContent = rates.EUR.buy;
@@ -309,7 +352,7 @@ function convert() {
   if (from === 'BYN') {
     inBYN = amount;
   } else {
-    inBYN = amount * rates[from].buy;
+    inBYN = amount * parseFloat(rates[from].buy);
   }
 
   // Конвертируем из BYN в целевую валюту
@@ -317,13 +360,16 @@ function convert() {
   if (to === 'BYN') {
     result = inBYN;
   } else {
-    result = inBYN / rates[to].sell;
+    const sellRate = parseFloat(rates[to].sell);
+    result = sellRate > 0 ? inBYN / sellRate : 0;
   }
 
   amountTo.value = result.toFixed(2);
   
-  if (rates[from].buy > 0 && rates[to].sell > 0) {
-    rateOut.textContent = `${(rates[from].buy / rates[to].sell).toFixed(4)}`;
+  const buyRate = parseFloat(rates[from].buy);
+  const sellRate = parseFloat(rates[to].sell);
+  if (buyRate > 0 && sellRate > 0) {
+    rateOut.textContent = `1 ${from} = ${(buyRate / sellRate).toFixed(4)} ${to}`;
   } else {
     rateOut.textContent = '— —';
   }
