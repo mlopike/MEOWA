@@ -88,11 +88,12 @@ function renderNews(data, countryFilter, categoryFilter) {
       <div class="news-date">${date}</div>
       <div>
         ${news.imageUrl
-          ? `<img src="${news.imageUrl}"
-                  style="width:100%;height:120px;object-fit:cover;
-                         border-radius:6px;margin-bottom:10px;"
-                  alt="">`
-          : ''}
+        ? `<img src="${news.imageUrl}"
+          style="width:100%;height:120px;object-fit:cover;
+                 border-radius:6px;margin-bottom:10px;display:block;"
+          alt=""
+          onerror="this.remove()">`
+        : ''}
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
           <span class="news-tag">${news.sourceName || 'Новость'}</span>
           <span style="font-family:var(--f-mono);font-size:11px;
