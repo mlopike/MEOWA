@@ -1,4 +1,4 @@
-package com.bsac.meowa.kurs.model;
+package com.bsac.meowa.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;

@@ -1,7 +1,8 @@
-package com.bsac.meowa.kurs.service;
+package com.bsac.meowa.service;
 
-import com.bsac.meowa.kurs.model.BranchRate;
-import com.bsac.meowa.kurs.repo.BranchRateRepository;
+import com.bsac.meowa.model.BranchRate;
+import com.bsac.meowa.repo.BranchRateRepository;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import java.time.LocalDateTime;
@@ -24,7 +25,7 @@ public class CurrencyService {
         
         BranchRate[] response = restTemplate.getForObject(url, BranchRate[].class);
         
-        if (response == null || response.length == 0) {
+        if (response == null) {
             return "No data received";
         }
 

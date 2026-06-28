@@ -28,7 +28,7 @@
     <div>
       <div class="h-eyebrow">04 / Раздел</div>
       <h1 class="page-title">Курс валют</h1>
-      <p class="page-sub">Конвертируйте сумму и сравните курсы по всем банкам — список справа можно сортировать по выгодности.</p>
+      <p class="page-sub">Конвертируйте валюту по курсу Беларусбанка. Данные обновляются автоматически.</p>
     </div>
   </div>
 
@@ -49,7 +49,7 @@
         </button>
         <div class="field">
           <label for="amount-to">Получаете</label>
-          <input id="amount-to" type="number" data-amount-to inputmode="decimal">
+          <input id="amount-to" type="number" data-amount-to inputmode="decimal" readonly>
         </div>
       </div>
 
@@ -58,54 +58,241 @@
           <select data-currency-from aria-label="Валюта отдаёте">
             <option value="USD" selected>USD — доллар</option>
             <option value="EUR">EUR — евро</option>
-            <option value="CNY">CNY — юань</option>
-            <option value="BYN">BYN — белор. рубль</option>
             <option value="RUB">RUB — рос. рубль</option>
+            <option value="BYN">BYN — белор. рубль</option>
           </select>
         </div>
         <div></div>
         <div class="field">
           <select data-currency-to aria-label="Валюта получаете">
-            <option value="RUB" selected>RUB — рос. рубль</option>
+            <option value="BYN" selected>BYN — белор. рубль</option>
             <option value="USD">USD — доллар</option>
             <option value="EUR">EUR — евро</option>
-            <option value="CNY">CNY — юань</option>
-            <option value="BYN">BYN — белор. рубль</option>
+            <option value="RUB">RUB — рос. рубль</option>
           </select>
         </div>
       </div>
 
       <div class="current-rate">
-        <span class="flap flap-lg" data-rate-out>1 USD = 92.40 RUB</span>
-        <span class="delta up">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="18 15 12 9 6 15"/></svg>
-          +0.34% за сутки
-        </span>
+        <span class="flap flap-lg" data-rate-out>Загрузка...</span>
+        <span class="delta" id="update-time">Обновлено: --</span>
+      </div>
+
+      <div style="margin-top: 20px; padding: 15px; background: #f5f5f5; border-radius: 4px;">
+        <strong>Средние курсы по Беларусбанку:</strong>
+        <div style="margin-top: 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <div>
+            <strong>USD:</strong> 
+            <span style="color: #28a745;" id="usd-buy">—</span> / 
+            <span style="color: #dc3545;" id="usd-sell">—</span>
+          </div>
+          <div>
+            <strong>EUR:</strong> 
+            <span style="color: #28a745;" id="eur-buy">—</span> / 
+            <span style="color: #dc3545;" id="eur-sell">—</span>
+          </div>
+          <div>
+            <strong>RUB:</strong> 
+            <span style="color: #28a745;" id="rub-buy">—</span> / 
+            <span style="color: #dc3545;" id="rub-sell">—</span>
+          </div>
+          <div style="font-size: 12px; color: #666;">
+            Всего отделений: <span id="total-branches">0</span>
+          </div>
+        </div>
       </div>
     </section>
 
     <aside class="card card-pad">
       <div class="panel-head">
-        <span class="panel-title">Курсы всех банков</span>
-        <button class="sort-btn" data-sort-rates>
-          <span>↓ Дешевле</span>
-        </button>
+        <span class="panel-title">Информация</span>
       </div>
-      <ul class="kurs-list" data-rates-list>
-        <li data-sell="92.95"><span class="rank">01</span><span class="name">Столичный Банк</span><span class="pair"><span class="flap flap-sm">92.40</span><span class="flap flap-sm">92.95</span></span></li>
-        <li data-sell="92.85"><span class="rank">02</span><span class="name">Восток Финанс</span><span class="pair"><span class="flap flap-sm">92.30</span><span class="flap flap-sm">92.85</span></span></li>
-        <li data-sell="92.70"><span class="rank">03</span><span class="name">ПримБанк</span><span class="pair"><span class="flap flap-sm">92.05</span><span class="flap flap-sm">92.70</span></span></li>
-        <li data-sell="92.61"><span class="rank">04</span><span class="name">АБ Норд</span><span class="pair"><span class="flap flap-sm">92.18</span><span class="flap flap-sm">92.61</span></span></li>
-        <li data-sell="92.55"><span class="rank">05</span><span class="name">Балтик Финанс</span><span class="pair"><span class="flap flap-sm">92.00</span><span class="flap flap-sm">92.55</span></span></li>
-        <li data-sell="92.50"><span class="rank">06</span><span class="name">Гарант Кредит</span><span class="pair"><span class="flap flap-sm">91.95</span><span class="flap flap-sm">92.50</span></span></li>
-      </ul>
+      
+      <div style="padding: 20px 0;">
+        <p style="margin-bottom: 15px;">
+          <strong>Источник данных:</strong><br>
+          Беларусбанк (API)
+        </p>
+        
+        <p style="margin-bottom: 15px;">
+          <strong>Как работает:</strong><br>
+          <small>Конвертер использует средние курсы по всем отделениям Беларусбанка в Беларуси.</small>
+        </p>
+
+        <div style="margin-top: 20px;">
+          <a href="/kurs/fetch" class="btn" style="display: block; text-align: center; padding: 12px; background: #0055a5; color: white; text-decoration: none; border-radius: 4px; margin-bottom: 10px;" onclick="refreshRates()">
+            🔄 Обновить курсы
+          </a>
+          <a href="/kurs/api" class="btn" style="display: block; text-align: center; padding: 12px; background: #6c757d; color: white; text-decoration: none; border-radius: 4px;">
+            📥 Скачать данные (JSON)
+          </a>
+        </div>
+
+        <div style="margin-top: 20px; padding: 15px; background: #e7f3ff; border-left: 4px solid #0055a5; border-radius: 4px;">
+          <small>
+            <strong>Примечание:</strong> Курсы могут отличаться в разных отделениях. Для точной информации обратитесь в конкретное отделение.
+          </small>
+        </div>
+      </div>
     </aside>
 
   </div>
 </main>
 
-<footer class="board-footer">ФинТабло — учебный макет интерфейса, данные демонстрационные.</footer>
+<footer class="board-footer">ФинТабло — курсы валют Беларусбанка</footer>
 
 <script src="script.js"></script>
+<script>
+// Глобальные переменные для курсов
+let rates = {
+  USD: { buy: 0, sell: 0 },
+  EUR: { buy: 0, sell: 0 },
+  RUB: { buy: 0, sell: 0 },
+  BYN: { buy: 1, sell: 1 }
+};
+
+// Загрузка данных при загрузке страницы
+document.addEventListener('DOMContentLoaded', function() {
+  loadRates();
+  setupConverter();
+});
+
+// Загрузка курсов с API
+async function loadRates() {
+  try {
+    const response = await fetch('/kurs/api');
+    const data = await response.json();
+    
+    if (data && data.length > 0) {
+      calculateAverageRates(data);
+      updateUI();
+    } else {
+      document.querySelector('[data-rate-out]').textContent = 'Нет данных';
+    }
+  } catch (error) {
+    console.error('Ошибка загрузки курсов:', error);
+    document.querySelector('[data-rate-out]').textContent = 'Ошибка загрузки';
+  }
+}
+
+// Вычисление средних курсов
+function calculateAverageRates(data) {
+  let usdBuySum = 0, usdSellSum = 0;
+  let eurBuySum = 0, eurSellSum = 0;
+  let rubBuySum = 0, rubSellSum = 0;
+  let count = 0;
+  let lastTime = null;
+
+  data.forEach(item => {
+    if (item.usdIn) { usdBuySum += item.usdIn; count++; }
+    if (item.usdOut) usdSellSum += item.usdOut;
+    if (item.eurIn) eurBuySum += item.eurIn;
+    if (item.eurOut) eurSellSum += item.eurOut;
+    if (item.rubIn) rubBuySum += item.rubIn;
+    if (item.rubOut) rubSellSum += item.rubOut;
+    if (item.time && (!lastTime || item.time > lastTime)) lastTime = item.time;
+  });
+
+  rates.USD.buy = count > 0 ? (usdBuySum / count).toFixed(4) : 0;
+  rates.USD.sell = count > 0 ? (usdSellSum / count).toFixed(4) : 0;
+  rates.EUR.buy = count > 0 ? (eurBuySum / count).toFixed(4) : 0;
+  rates.EUR.sell = count > 0 ? (eurSellSum / count).toFixed(4) : 0;
+  rates.RUB.buy = count > 0 ? (rubBuySum / count).toFixed(4) : 0;
+  rates.RUB.sell = count > 0 ? (rubSellSum / count).toFixed(4) : 0;
+
+  // Обновление времени
+  if (lastTime) {
+    const date = new Date(lastTime);
+    const timeStr = date.toLocaleString('ru-RU', { 
+      day: '2-digit', 
+      month: '2-digit', 
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+    document.getElementById('update-time').textContent = 'Обновлено: ' + timeStr;
+  }
+
+  document.getElementById('total-branches').textContent = data.length;
+}
+
+// Обновление интерфейса
+function updateUI() {
+  document.getElementById('usd-buy').textContent = rates.USD.buy;
+  document.getElementById('usd-sell').textContent = rates.USD.sell;
+  document.getElementById('eur-buy').textContent = rates.EUR.buy;
+  document.getElementById('eur-sell').textContent = rates.EUR.sell;
+  document.getElementById('rub-buy').textContent = rates.RUB.buy;
+  document.getElementById('rub-sell').textContent = rates.RUB.sell;
+
+  convert();
+}
+
+// Настройка конвертера
+function setupConverter() {
+  const amountFrom = document.querySelector('[data-amount-from]');
+  const amountTo = document.querySelector('[data-amount-to]');
+  const currencyFrom = document.querySelector('[data-currency-from]');
+  const currencyTo = document.querySelector('[data-currency-to]');
+  const swapBtn = document.querySelector('[data-swap]');
+
+  amountFrom.addEventListener('input', convert);
+  currencyFrom.addEventListener('change', convert);
+  currencyTo.addEventListener('change', convert);
+
+  swapBtn.addEventListener('click', function() {
+    const temp = currencyFrom.value;
+    currencyFrom.value = currencyTo.value;
+    currencyTo.value = temp;
+    convert();
+  });
+}
+
+// Конвертация валют
+function convert() {
+  const amountFrom = document.querySelector('[data-amount-from]');
+  const amountTo = document.querySelector('[data-amount-to]');
+  const currencyFrom = document.querySelector('[data-currency-from]');
+  const currencyTo = document.querySelector('[data-currency-to]');
+  const rateOut = document.querySelector('[data-rate-out]');
+
+  const amount = parseFloat(amountFrom.value) || 0;
+  const from = currencyFrom.value;
+  const to = currencyTo.value;
+
+  // Конвертируем в BYN
+  let inBYN;
+  if (from === 'BYN') {
+    inBYN = amount;
+  } else {
+    inBYN = amount * rates[from].buy;
+  }
+
+  // Конвертируем из BYN в целевую валюту
+  let result;
+  if (to === 'BYN') {
+    result = inBYN;
+  } else {
+    result = inBYN / rates[to].sell;
+  }
+
+  amountTo.value = result.toFixed(2);
+  rateOut.textContent = `1 ${from} = ${(rates[from].buy / rates[to].sell).toFixed(4)} ${to}`;
+}
+
+// Обновление курсов по кнопке
+function refreshRates() {
+  fetch('/kurs/fetch')
+    .then(response => response.text())
+    .then(message => {
+      alert(message);
+      loadRates();
+    })
+    .catch(error => {
+      alert('Ошибка обновления: ' + error);
+    });
+  return false;
+}
+</script>
 </body>
 </html>

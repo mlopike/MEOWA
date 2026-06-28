@@ -1,7 +1,8 @@
-package com.bsac.meowa.kurs.controller;
+package com.bsac.meowa.controller;
 
-import com.bsac.meowa.kurs.model.BranchRate;
-import com.bsac.meowa.kurs.service.CurrencyService;
+import com.bsac.meowa.model.BranchRate;
+import com.bsac.meowa.service.CurrencyService;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
